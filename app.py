@@ -1,7 +1,10 @@
 from flask import Flask, render_template
+import sqlite3
+from sqlite3 import Error
+
+DB_NAME = "C:/Users/18406/OneDrive - Wellington College/13DTS/Smile/smile.db"
 
 app = Flask(__name__)
-DATABASE = smile.db
 
 def create_connection(db_file):
     ###
@@ -11,10 +14,11 @@ def create_connection(db_file):
     ###
     try:
         connection = sqlite3.connect(db_file)
-        return_connection
-    except:
-        print("Error")
-        return None
+        return connection
+    except Error as e:
+        print(e)
+
+    return None
 
 
 @app.route('/')
@@ -24,9 +28,9 @@ def render_homepage():
 
 @app.route('/menu')
 def render_menu_page():
-    con = create_connection(DATABASE)
+    con = create_connection(DB_NAME)
 
-    query = "SELECT name, description, volume, price, image FROM product"
+    query = "SELECT name, description, volume, price, image FROM products"
     cur = con.cursor()      # Creates a cursor to write the query
     cur.execute(query)      # Runs the query
     product_list = cur.fetchall()
