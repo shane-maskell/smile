@@ -43,5 +43,12 @@ def render_menu_page():
 def render_contact_page():
     return render_template('contact.html')
 
+@app.route('/login', methods=['GET', 'POST'])
+def render_login_page():
+    return render_template('login.html')
+
+@app.route('/signup', methods=['GET', 'POST'])
+def render_signup_page():
+    return render_template('signup.html')
 
 app.run(host='0.0.0.0', debug=True)
