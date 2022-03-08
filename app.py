@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect
 import sqlite3
 from sqlite3 import Error
 
@@ -49,6 +49,32 @@ def render_login_page():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def render_signup_page():
+    if request.method == 'POST':
+        print(request.form)
+        name = request.form.get('fname').title().strip()
+        lname = request.form.get('lname').title().strip()
+        email = request.form.get('email').title().strip()
+        password = request.form.get('password')
+        password2 = request.form.get('password2')
+
+
+        if password != password2:
+            return redirect('/signup?error=Passwords+do+not+match')
+
+        if len(password) < 8:
+            return redirect('/signup?error=Passwords+must+be+at+least+8+characters')
+
+        con = create_connection(DB_NAME)
+
+        query = "INSERT INTO customer (name, lname, email, password) VALUES (?, ?, ?, ?)"
+
+        cur = con.cursor()
+        cur.execute(query, (name,lname, email, password))
+        con.commit()
+        con.close()
+        return redirect('/login')
+
     return render_template('signup.html')
+
 
 app.run(host='0.0.0.0', debug=True)
