@@ -1340,7 +1340,7 @@
       <DataType>integer|0s</DataType>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="495" parent="170" name="name">
+    <column id="495" parent="170" name="fname">
       <Position>2</Position>
       <DataType>varchar(30)|0s</DataType>
     </column>
