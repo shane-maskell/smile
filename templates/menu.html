@@ -5,6 +5,7 @@ menu
 {% endblock %}
 
 {% block main %}
+    <div class="products">
 {% for product in products %}
     <div class="product-box">
         <h3>{{ product[0] }}</h3>
@@ -13,5 +14,5 @@ menu
         <p><strong>Price: </strong>${{ product[3] }}</p>
         <img src="static/images/{{ product[4] }}.jpg">
     </div>
-{% endfor %}
+{% endfor %}</div>
 {% endblock %}

@@ -62,11 +62,10 @@ def render_login_page():
         print(request.form)
         email = request.form.get('email').lower().strip()
         password = request.form.get('password')
-        hashed_password = bcrypt.generate_password_hash(password)
         con = create_connection(DB_NAME)
-        query = "SELECT id, fname FROM customer WHERE email=? AND password=?"
+        query = "SELECT id, fname, password FROM customer WHERE email=?"
         cur = con.cursor()
-        cur.execute(query, (email, hashed_password))
+        cur.execute(query, (email, ))
         user_data = cur.fetchall()
         con.close()
 
@@ -78,6 +77,8 @@ def render_login_page():
             return redirect("login?error=Email+or+password+is+incorrect")
 
         if not bcrypt.check_password_hash(db_password, password):
+            return redirect("login?error=Email+or+password+is+incorrect")
+
         #Set up a session for this login.
         session['email'] = email
         session['username'] = user_id
@@ -99,7 +100,7 @@ def render_signup_page():
         print(request.form)
         name = request.form.get('fname').title().strip()
         lname = request.form.get('lname').title().strip()
-        email = request.form.get('email').title().strip()
+        email = request.form.get('email').lower().strip()
         password = request.form.get('password')
         password2 = request.form.get('password2')
 
@@ -113,7 +114,7 @@ def render_signup_page():
         hashed_password = bcrypt.generate_password_hash(password)
         con = create_connection(DB_NAME)
 
-        query = "INSERT INTO customer (name, lname, email, password) VALUES (?, ?, ?, ?)"
+        query = "INSERT INTO customer (fname, lname, email, password) VALUES (?, ?, ?, ?)"
 
         cur = con.cursor()
         cur.execute(query, (name,lname, email, hashed_password))
